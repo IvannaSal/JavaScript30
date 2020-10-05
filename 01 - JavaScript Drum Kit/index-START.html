@@ -8,7 +8,7 @@
 <body>
 
 
-  
+
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -59,7 +59,25 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  //This "listens" for the 'keydown' event (user pressing key)
+  //When that occurs function runs (e)vent. 
+  //console.log the event so that we make sure it has ran
+  window.addEventListener('keydown', function(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return; // stop the function from running all together
+    audio.currentTime = 0; //rewind to the start of the sound (will not wait for sound to finish to go back to the start)
+    audio.play(); //will not play until sound finishes 
+    key.classList.add('playing');
+  });
 
+  function removeTransition(e) {
+    if(e.propertyName !== 'transform') return; //skip it if it's not a transform
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 </script>
 
 
